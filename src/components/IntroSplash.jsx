@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Logo from './Logo';
+import MagicRings from './MagicRings';
 
 export default function IntroSplash({ onComplete }) {
   const [progress, setProgress] = useState(0);
@@ -40,17 +41,14 @@ export default function IntroSplash({ onComplete }) {
   // Handle Warp portal trigger
   useEffect(() => {
     if (progress === 100) {
-      // Step 1: Laser scanner completes, begin warp zoom (300ms delay)
       const warpStartTimer = setTimeout(() => {
         setIsWarping(true);
       }, 200);
 
-      // Step 2: Trigger full-screen warp slideup (1.1s delay)
       const portalTimer = setTimeout(() => {
         setPortalActive(true);
       }, 1000);
 
-      // Step 3: Complete transition to App
       const finishTimer = setTimeout(() => {
         onComplete();
       }, 1800);
@@ -64,18 +62,23 @@ export default function IntroSplash({ onComplete }) {
   }, [progress, onComplete]);
 
   return (
-    <div className={`splash-container ${portalActive ? 'splash-slideup' : ''}`}>
+    <div className={`splash-container ${portalActive ? 'splash-slideup' : ''}`} style={{ overflow: 'hidden' }}>
       
+      {/* Background Magic Rings from React Bits */}
+      {!isWarping && (
+        <MagicRings 
+          color="#00d2ff" 
+          colorTwo="#7c3aed" 
+          ringCount={8} 
+          speed={1.2} 
+          followMouse={true} 
+          clickBurst={true} 
+          opacity={0.8}
+        />
+      )}
+
       {/* Holographic Laser Grid Scanner Sweep Line */}
       {!isWarping && <div className="hologram-scanner" />}
-
-      {/* Holographic Concentric Expanding Rings */}
-      {stage === 'loaded' && !isWarping && (
-        <>
-          <div className="hologram-ring-pulse" style={{ top: 'calc(50% - 165px)', left: 'calc(50% - 120px)' }} />
-          <div className="hologram-ring-pulse hologram-ring-pulse-2" style={{ top: 'calc(50% - 165px)', left: 'calc(50% - 120px)' }} />
-        </>
-      )}
 
       {/* Outer wrapper that triggers full portal warp zoom */}
       <div 
@@ -88,7 +91,8 @@ export default function IntroSplash({ onComplete }) {
           maxWidth: '400px',
           position: 'relative',
           transition: 'transform 0.4s ease',
-          transformOrigin: '50% 32%' // Zoom centering on the robot's face
+          transformOrigin: '50% 32%', // Zoom centering on the robot's face
+          zIndex: 10
         }}
       >
         
