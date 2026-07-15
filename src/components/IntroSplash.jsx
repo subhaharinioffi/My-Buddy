@@ -5,8 +5,6 @@ import MagicRings from './MagicRings';
 export default function IntroSplash({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState('drawing'); // drawing, text, loaded
-  const [isWarping, setIsWarping] = useState(false);
-  const [portalActive, setPortalActive] = useState(false);
 
   useEffect(() => {
     // Stage 1: Draw the logo (1s)
@@ -38,47 +36,29 @@ export default function IntroSplash({ onComplete }) {
     };
   }, []);
 
-  // Handle Warp portal trigger
+  // Trigger onComplete instantly when progress hits 100%
   useEffect(() => {
     if (progress === 100) {
-      const warpStartTimer = setTimeout(() => {
-        setIsWarping(true);
-      }, 200);
-
-      const portalTimer = setTimeout(() => {
-        setPortalActive(true);
-      }, 1000);
-
-      const finishTimer = setTimeout(() => {
-        onComplete();
-      }, 1800);
-
-      return () => {
-        clearTimeout(warpStartTimer);
-        clearTimeout(portalTimer);
-        clearTimeout(finishTimer);
-      };
+      onComplete();
     }
   }, [progress, onComplete]);
 
   return (
-    <div className={`splash-container ${portalActive ? 'splash-slideup' : ''}`} style={{ overflow: 'hidden' }}>
+    <div className="splash-container" style={{ overflow: 'hidden' }}>
       
       {/* Background Magic Rings from React Bits */}
-      {!isWarping && (
-        <MagicRings 
-          color="#00d2ff" 
-          colorTwo="#7c3aed" 
-          ringCount={8} 
-          speed={1.2} 
-          followMouse={true} 
-          clickBurst={true} 
-          opacity={0.8}
-        />
-      )}
+      <MagicRings 
+        color="#00d2ff" 
+        colorTwo="#7c3aed" 
+        ringCount={8} 
+        speed={1.2} 
+        followMouse={true} 
+        clickBurst={true} 
+        opacity={0.8}
+      />
 
       {/* Holographic Laser Grid Scanner Sweep Line */}
-      {!isWarping && <div className="hologram-scanner" />}
+      <div className="hologram-scanner" />
 
       {/* Outer wrapper */}
       <div 
@@ -95,38 +75,34 @@ export default function IntroSplash({ onComplete }) {
         
         {/* Render Logo */}
         <Logo 
-          showText={!isWarping} 
+          showText={true} 
           animate={stage !== 'loaded'} 
           size={180} 
         />
 
-        {/* Loader elements (hide during reassembly warp) */}
-        {!isWarping && (
-          <>
-            <div className="splash-loader-bar" style={{ marginTop: '24px' }}>
-              <div
-                className="splash-loader-progress"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+        {/* Loader elements */}
+        <div className="splash-loader-bar" style={{ marginTop: '24px' }}>
+          <div
+            className="splash-loader-progress"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
 
-            <button
-              onClick={onComplete}
-              className="btn-secondary"
-              style={{
-                marginTop: '32px',
-                padding: '8px 16px',
-                fontSize: '0.85rem',
-                opacity: progress > 20 ? 0.7 : 0,
-                pointerEvents: progress > 20 ? 'auto' : 'none',
-                transition: 'opacity 0.5s ease',
-                borderColor: 'rgba(0, 210, 255, 0.2)'
-              }}
-            >
-              Skip Intro
-            </button>
-          </>
-        )}
+        <button
+          onClick={onComplete}
+          className="btn-secondary"
+          style={{
+            marginTop: '32px',
+            padding: '8px 16px',
+            fontSize: '0.85rem',
+            opacity: progress > 20 ? 0.7 : 0,
+            pointerEvents: progress > 20 ? 'auto' : 'none',
+            transition: 'opacity 0.5s ease',
+            borderColor: 'rgba(0, 210, 255, 0.2)'
+          }}
+        >
+          Skip Intro
+        </button>
       </div>
     </div>
   );
