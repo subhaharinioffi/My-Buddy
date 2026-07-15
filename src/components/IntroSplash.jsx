@@ -80,9 +80,8 @@ export default function IntroSplash({ onComplete }) {
       {/* Holographic Laser Grid Scanner Sweep Line */}
       {!isWarping && <div className="hologram-scanner" />}
 
-      {/* Outer wrapper that triggers full portal warp zoom */}
+      {/* Outer wrapper */}
       <div 
-        className={isWarping ? 'launching-warp' : ''}
         style={{ 
           display: 'flex', 
           flexDirection: 'column', 
@@ -90,8 +89,6 @@ export default function IntroSplash({ onComplete }) {
           width: '90%', 
           maxWidth: '400px',
           position: 'relative',
-          transition: 'transform 0.4s ease',
-          transformOrigin: '50% 32%', // Zoom centering on the robot's face
           zIndex: 10
         }}
       >
