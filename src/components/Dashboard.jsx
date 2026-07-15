@@ -30,6 +30,8 @@ const TIPS = [
   }
 ];
 
+const MOBILE_BREAKPOINT = 768;
+
 export default function Dashboard({ user, stats, setActiveTab, upcomingTasks, toggleTask }) {
   const [selectedMood, setSelectedMood] = useState(null);
   const [moodResponse, setMoodResponse] = useState('');
